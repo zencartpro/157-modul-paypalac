@@ -1,0 +1,199 @@
+<?php
+/**
+ * PayPal Advanced Checkout Webhook Responder
+ * This class handles verifying the validity of an incoming webhook
+ * to ensure that it is legitimate. It checks POST headers for relevance
+ * and checks that the payload's CRC check passes validity with PayPal
+ *
+ * @copyright Copyright 2023-2025 Zen Cart Development Team
+ * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: DrByte June 2025 $
+ *
+ * Last updated: v1.2.0
+ */
+namespace PayPalAdvancedCheckout\Webhooks;
+
+use PayPalAdvancedCheckout\Api\PayPalAdvancedCheckoutApi;
+
+class WebhookResponder
+{
+    /** @var bool */
+    protected $shouldRespond = false;
+    /** @var ?string */
+    protected $webhook_listener_subscribe_id = null;
+    /** @var WebhookObject */
+    protected $webhook;
+    public function __construct(WebhookObject $webhook) {
+        $this->webhook = $webhook;
+        $this->setWebhookSubscribeId();
+    }
+
+    /**
+     * Check that headers match what PayPal Webhooks will contain,
+     * and check that a few usual body content properties are present
+     */
+    public function shouldRespond(): bool
+    {
+        $headers = array_change_key_case($this->webhook->getHeaders(), CASE_UPPER);
+        $data = $this->webhook->getJsonBody();
+        if (array_key_exists('PAYPAL-AUTH-VERSION', $headers)
+            && array_key_exists('PAYPAL-AUTH-ALGO', $headers)
+            && isset($data['event_type'])
+            && strpos((string)$this->webhook->getUserAgent(), 'PayPal/') !== false
+        ) {
+            $this->shouldRespond = true;
+        }
+
+        return $this->shouldRespond;
+    }
+
+    public function verify(): ?bool
+    {
+        if ($this->shouldRespond !== true) {
+            return null;
+        }
+
+        $valid = $this->doCrcCheck();
+
+        // Null means we couldn't complete a CRC check (ie: internal issue, not "failed validation"),
+        // So this falls through to trying a postback instead
+        if ($valid === null) {
+            $valid = $this->verifyByPostback();
+        }
+
+        // null means "we" (internally) couldn't complete a verification attempt (and we *will* want PayPal to see it as failed-to-complete, so they keep re-sending)
+        // false means "failed validation"
+        // true means "passed validation"
+        if ($valid !== null) {
+            // send a 200 response to acknowledge that we received the webhook
+            http_response_code(200);
+        }
+
+        return $valid;
+    }
+
+    /**
+     * @return bool|null  returns null if we cannot do CRC check, so fails over to PostBack approach
+     */
+    protected function doCrcCheck(): ?bool
+    {
+        $headers = array_change_key_case($this->webhook->getHeaders(), CASE_UPPER);
+
+        $transmissionId = $headers['PAYPAL-TRANSMISSION-ID'];
+        $timestamp = $headers['PAYPAL-TRANSMISSION-TIME'];
+        $crc = \hexdec(\hash('crc32b', $this->webhook->getRawBody()));
+        $calculatedSignature = "$transmissionId|$timestamp|$this->webhook_listener_subscribe_id|$crc";
+        $transmissionSignature = $headers['PAYPAL-TRANSMISSION-SIG'];
+        $decodedSignature = base64_decode($transmissionSignature);
+
+        $publicKeyUrl = $headers['PAYPAL-CERT-URL'] ?? '';
+        $certParts = parse_url($publicKeyUrl);
+        $certHost = strtolower((string)($certParts['host'] ?? ''));
+        $allowedCertHosts = [
+            'api.paypal.com',
+            'api-m.paypal.com',
+            'api.sandbox.paypal.com',
+            'api-m.sandbox.paypal.com',
+        ];
+        if (($certParts['scheme'] ?? '') !== 'https' || !in_array($certHost, $allowedCertHosts, true)) {
+            return false;
+        }
+
+        // @TODO - download and cache the public key, from the URL, instead of retrieving fresh in real time
+        $pem_cert = $this->downloadWithCurl($publicKeyUrl);
+        if ($pem_cert === null && filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
+            $pem_cert = \file_get_contents($publicKeyUrl);
+        }
+
+        // -----
+        // If the certificate could not be downloaded (e.g. the server blocks
+        // outbound HTTP requests or allow_url_fopen is disabled) or it does not
+        // parse as a public key, return null so the caller falls back to
+        // postback verification instead of failing the CRC check outright.
+        //
+        if (!is_string($pem_cert) || $pem_cert === '') {
+            return null;
+        }
+
+        $publicKey = openssl_get_publickey($pem_cert);
+        if ($publicKey === false) {
+            return null;
+        }
+
+        $result = openssl_verify($calculatedSignature, $decodedSignature, $publicKey, OPENSSL_ALGO_SHA256);
+        return $result === 1;
+    }
+
+    /**
+     * Download the PayPal webhook-signing certificate via cURL. Returns null
+     * when cURL is unavailable or the request fails, so the caller can fall
+     * back to file_get_contents or postback verification.
+     */
+    protected function downloadWithCurl(string $url): ?string
+    {
+        if (!function_exists('curl_init')) {
+            return null;
+        }
+
+        $ch = \curl_init($url);
+        \curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_TIMEOUT => 15,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+        ]);
+        $pem_cert = \curl_exec($ch);
+        $http_code = (int)\curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        \curl_close($ch);
+
+        if ($pem_cert === false || $http_code !== 200) {
+            return null;
+        }
+        return $pem_cert;
+    }
+
+    /**
+     * @return bool|null  returns null if unable to use CURL or if the access token is invalid.
+     */
+    protected function verifyByPostback(): ?bool
+    {
+        $headers = array_change_key_case($this->webhook->getHeaders(), CASE_UPPER);
+        $params_array = [
+            'transmission_id' => $headers['PAYPAL-TRANSMISSION-ID'],
+            'transmission_time' => $headers['PAYPAL-TRANSMISSION-TIME'],
+            'cert_url' => $headers['PAYPAL-CERT-URL'],
+            'auth_algo' => 'SHA256withRSA',
+            'transmission_sig' => $headers['PAYPAL-TRANSMISSION-SIG'],
+            'webhook_id' => $this->webhook_listener_subscribe_id,
+            'webhook_event' => json_decode($this->webhook->getRawBody(), false), // decoded here because we re-encode for transmission later.
+        ];
+
+        // Load the PayPal Advanced Checkout API class and get the credentials, so we can make the postback using the current access token
+        require dirname(__DIR__, 3) . '/paypalac.php';
+        [$client_id, $secret] = \paypalac::getEnvironmentInfo();
+        $ppr = new PayPalAdvancedCheckoutApi(MODULE_PAYMENT_PAYPALAC_SERVER, $client_id, $secret);
+
+        // We pass true here because we can only get an access token if it is valid; else we must just say the webhook validation failed
+        if ($ppr->validatePayPalCredentials(true) === false) {
+            //$this->ppac_logger->write('PayPal credentials are invalid or token expired; cannot verify webhook by postback.', false, 'before');
+            return null; // Unable to get a current access token.
+        }
+
+        // Now that the access token is confirmed, we submit this postback via CURL.
+        $result = $ppr->webhookVerifyByPostback($params_array);
+
+        return $result === true;
+    }
+
+    /**
+     * This method is only used by the Postback verification method
+     */
+    protected function setWebhookSubscribeId()
+    {
+        if (defined('MODULE_PAYMENT_PAYPALAC_SUBSCRIBED_WEBHOOKS')) {
+            $this->webhook_listener_subscribe_id = MODULE_PAYMENT_PAYPALAC_SUBSCRIBED_WEBHOOKS;
+        }
+    }
+}
