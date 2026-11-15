@@ -1,6 +1,6 @@
 <?php
 /**
- * Wallet helper endpoint for PayPal Advanced Checkout wallets (Google Pay, Apple Pay, Venmo, Pay Later).
+ * Wallet helper endpoint for PayPal Advanced Checkout wallets (Google Pay, Apple Pay, Pay Later).
  */
 
 require_once __DIR__ . '/ppac_paths.php';
@@ -316,7 +316,7 @@ if (empty($moduleInstance->enabled)) {
     return;
 }
 
-// Save posted wallet payloads (e.g., Venmo onApprove) into the session before proceeding to confirmation
+// Save posted wallet payloads into the session before proceeding to confirmation
 if ($payloadData !== null) {
     $isPayloadArray = is_array($payloadData);
     $hasOrderId = $isPayloadArray && isset($payloadData['orderID']) && is_string($payloadData['orderID']) && trim($payloadData['orderID']) !== '';

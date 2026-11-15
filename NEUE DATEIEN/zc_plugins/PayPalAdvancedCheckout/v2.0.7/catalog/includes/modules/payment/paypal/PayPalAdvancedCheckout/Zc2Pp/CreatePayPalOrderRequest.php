@@ -1025,34 +1025,6 @@ class CreatePayPalOrderRequest extends ErrorInfo
         return $payment_source;
     }
 
-    protected function buildVenmoPaymentSource(\order $order): array
-    {
-        $payment_source = [
-            'name' => [
-                'given_name' => $order->billing['firstname'],
-                'surname' => $order->billing['lastname'],
-            ],
-            'email_address' => $order->customer['email_address'],
-            'billing_address' => Address::get($order->billing),
-            'attributes' => [
-                'vault' => [
-                    'store_in_vault' => 'ON_SUCCESS',
-                    'usage_type' => 'MERCHANT',
-                    'customer_type' => 'CONSUMER',
-                ],
-            ],
-        ];
-
-        $phone = $order->customer['telephone'] ?? '';
-        if ($phone !== '') {
-            $payment_source['phone_number'] = [
-                'national_number' => preg_replace('/[^0-9]/', '', (string)$phone),
-            ];
-        }
-
-        return $payment_source;
-    }
-
     /**
      * Pay Later Confirm Order redirect: Orders v2 payment_source.paypal shape
      * (paylater is not a valid create-order payment_source key) plus return/cancel URLs.

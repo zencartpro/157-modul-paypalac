@@ -471,13 +471,13 @@ if (!function_exists('paypalac_get_payflow_cards')) {
             return [];
         }
 
-        $sql = "SELECT scc.saved_credit_card_id, scc.type, scc.last_digits, scc.expiry,
-                       scc.name_on_card, scc.is_primary, scc.api_type
+        $sql = "SELECT scc.saved_credit_card_id, scc.type, scc.last_digits, scc.expiry_year,
+                       scc.holder_name, scc.is_default, scc.type
                 FROM " . TABLE_SAVED_CREDIT_CARDS . " scc
                 WHERE scc.customers_id = " . (int)$customers_id . "
                   AND scc.is_deleted = '0'
-                  AND LAST_DAY(STR_TO_DATE(scc.expiry, '%m%y')) > CURDATE()
-                ORDER BY scc.is_primary DESC, scc.saved_credit_card_id DESC";
+                  AND LAST_DAY(STR_TO_DATE(scc.expiry_year, '%m%y')) > CURDATE()
+                ORDER BY scc.is_default DESC, scc.saved_credit_card_id DESC";
 
         $result = $db->Execute($sql);
         $cards = [];
@@ -492,9 +492,9 @@ if (!function_exists('paypalac_get_payflow_cards')) {
                 'type' => (string)$result->fields['type'],
                 'last_digits' => (string)$result->fields['last_digits'],
                 'expiry' => (string)$result->fields['expiry'],
-                'name_on_card' => (string)$result->fields['name_on_card'],
-                'is_primary' => (int)$result->fields['is_primary'],
-                'api_type' => (string)($result->fields['api_type'] ?? 'payflow'),
+                'holder_name' => (string)$result->fields['holder_name'],
+                'is_default' => (int)$result->fields['is_default'],
+                'type' => (string)($result->fields['type'] ?? 'payflow'),
             ];
             $result->MoveNext();
         }
@@ -516,8 +516,8 @@ if (!function_exists('paypalac_normalize_payflow_card')) {
         $brand = (string)($payflowCard['type'] ?? '');
         $lastDigits = (string)($payflowCard['last_digits'] ?? '');
         $expiry = (string)($payflowCard['expiry'] ?? '');
-        $cardholderName = (string)($payflowCard['name_on_card'] ?? '');
-        $apiType = (string)($payflowCard['api_type'] ?? 'payflow');
+        $cardholderName = (string)($payflowCard['holder_name'] ?? '');
+        $apiType = (string)($payflowCard['type'] ?? 'payflow');
 
         // Format expiry from MMYY to MM/YYYY
         $formattedExpiry = paypalac_format_vault_expiry($expiry);
@@ -543,7 +543,7 @@ if (!function_exists('paypalac_normalize_payflow_card')) {
             'delete_href' => ($cardId > 0)
                 ? zen_href_link(FILENAME_ACCOUNT_SAVED_CREDIT_CARDS, 'delete_payflow=' . $cardId, 'SSL')
                 : '',
-            'api_type' => $apiType,
+            'type' => $apiType,
         ];
     }
 }
@@ -746,15 +746,15 @@ if (!function_exists('paypalac_replacement_card_id')) {
                       AND scc.saved_credit_card_id <> " . (int)$exclude_card_id . "
                       AND scc.is_deleted = '0'
                       AND (
-                        (scc.expiry IS NOT NULL AND scc.expiry <> ''
-                         AND LAST_DAY(STR_TO_DATE(scc.expiry, '%m%y')) > CURDATE())
+                        (scc.expiry_year IS NOT NULL AND scc.expiry_year <> ''
+                         AND LAST_DAY(STR_TO_DATE(scc.expiry_year, '%m%y')) > CURDATE())
                         OR
                         (scc.vault_id IS NOT NULL AND scc.vault_id <> ''
                          AND pv.paypal_vault_id IS NOT NULL
                          AND (pv.expiry IS NULL OR pv.expiry = ''
                               OR LAST_DAY(STR_TO_DATE(pv.expiry, '%Y-%m')) > CURDATE()))
                       )
-                    ORDER BY scc.is_primary, scc.saved_credit_card_id DESC
+                    ORDER BY scc.is_default, scc.saved_credit_card_id DESC
                     LIMIT 1";
         } else {
             $sql = "SELECT saved_credit_card_id
@@ -765,7 +765,7 @@ if (!function_exists('paypalac_replacement_card_id')) {
                       AND expiry IS NOT NULL
                       AND expiry <> ''
                       AND LAST_DAY(STR_TO_DATE(expiry, '%m%y')) > CURDATE()
-                    ORDER BY is_primary, saved_credit_card_id DESC
+                    ORDER BY is_default, saved_credit_card_id DESC
                     LIMIT 1";
         }
 

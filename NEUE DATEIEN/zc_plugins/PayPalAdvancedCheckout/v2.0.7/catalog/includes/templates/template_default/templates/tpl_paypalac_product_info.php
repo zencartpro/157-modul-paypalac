@@ -36,18 +36,4 @@ if (
     }
     include($template_path);
 }
-
-// Load Venmo template if enabled for product page
-if (
-    defined('MODULE_PAYMENT_PAYPALAC_VENMO_STATUS') &&
-    MODULE_PAYMENT_PAYPALAC_VENMO_STATUS === 'True' &&
-    defined('MODULE_PAYMENT_PAYPALAC_VENMO_PRODUCT_PAGE') &&
-    MODULE_PAYMENT_PAYPALAC_VENMO_PRODUCT_PAGE === 'True'
-) {
-    $template_path = DIR_WS_TEMPLATES . $template_dir . '/templates/tpl_modules_paypalac_product_venmo.php';
-    if (!file_exists($template_path)) {
-        $template_path = DIR_WS_TEMPLATES . 'template_default/templates/tpl_modules_paypalac_product_venmo.php';
-    }
-    include($template_path);
-}
 ?>

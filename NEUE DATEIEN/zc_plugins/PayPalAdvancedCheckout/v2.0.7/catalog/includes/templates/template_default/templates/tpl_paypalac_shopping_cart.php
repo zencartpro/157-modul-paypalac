@@ -42,14 +42,6 @@ if (defined('MODULE_PAYMENT_PAYPALAC_APPLEPAY_STATUS') && MODULE_PAYMENT_PAYPALA
     include($template_path);
 }
 
-// Load Venmo template
-if (defined('MODULE_PAYMENT_PAYPALAC_VENMO_STATUS') && MODULE_PAYMENT_PAYPALAC_VENMO_STATUS === 'True' && defined('MODULE_PAYMENT_PAYPALAC_VENMO_SHOPPING_CART') && MODULE_PAYMENT_PAYPALAC_VENMO_SHOPPING_CART === 'True') {
-    $template_path = DIR_WS_TEMPLATES . $template_dir . '/templates/tpl_modules_paypalac_venmo.php';
-    if (!file_exists($template_path)) {
-        $template_path = DIR_WS_TEMPLATES . 'template_default/templates/tpl_modules_paypalac_venmo.php';
-    }
-    include($template_path);
-}
 ?>
 
 <style>

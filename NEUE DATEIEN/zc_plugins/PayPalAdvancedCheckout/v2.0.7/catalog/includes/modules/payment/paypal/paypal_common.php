@@ -110,7 +110,7 @@ class PayPalCommon {
 
     /**
      * Handle wallet payment confirmation for digital wallet modules
-     * (Google Pay, Apple Pay, Venmo)
+     * (Google Pay, Apple Pay)
      *
      * @param string $walletType The wallet type (google_pay, apple_pay, venmo)
      * @param string $payloadFieldName The POST field name containing the wallet payload
@@ -170,8 +170,7 @@ class PayPalCommon {
         // - Pay Later: Approved via PayPal's own hosted popup (paypal.Buttons()).
         //   Skip confirmPaymentSource -- it is only for orders confirmed
         //   without a payment_source (e.g. card-only multi-step flows) and
-        //   was failing here even for eligible carts; just verify the order.
-        // - Venmo: Create order here, then confirm server-side
+        //   was failing here even for eligible carts; just verify the order.        
         // -----------------------------------------------------------------
         if ($walletType === 'paylater') {
             $orderIdToVerify = $_SESSION['PayPalAdvancedCheckout']['Order']['id'] ?? $payloadOrderId;
@@ -264,7 +263,7 @@ class PayPalCommon {
             }
         }
 
-        // Venmo: Create order on server, then confirm using server-side confirmPaymentSource
+        
         // (This path is also a fallback for any future wallet types that don't use client-side confirmation)
         $orderIdToConfirm = $_SESSION['PayPalAdvancedCheckout']['Order']['id'] ?? null;
 
@@ -1373,7 +1372,7 @@ class PayPalCommon {
             'paypal' => 'PayPal',
             'google_pay' => 'Google Pay',
             'apple_pay' => 'Apple Pay',
-            'venmo' => 'Venmo',
+            
         ];
 
         if (isset($wallet_map[$payment_type_lower])) {

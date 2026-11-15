@@ -48,7 +48,6 @@ class zcObserverPaypaladvcheckout
             (defined('MODULE_PAYMENT_PAYPALAC_CREDITCARD_STATUS') && MODULE_PAYMENT_PAYPALAC_CREDITCARD_STATUS === 'True') ||
             (defined('MODULE_PAYMENT_PAYPALAC_APPLEPAY_STATUS') && MODULE_PAYMENT_PAYPALAC_APPLEPAY_STATUS === 'True') ||
             (defined('MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_STATUS') && MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_STATUS === 'True') ||
-            (defined('MODULE_PAYMENT_PAYPALAC_VENMO_STATUS') && MODULE_PAYMENT_PAYPALAC_VENMO_STATUS === 'True') ||
             (defined('MODULE_PAYMENT_PAYPALAC_PAYLATER_STATUS') && MODULE_PAYMENT_PAYPALAC_PAYLATER_STATUS === 'True')
         );
 
@@ -573,15 +572,12 @@ class zcObserverPaypaladvcheckout
         // -----
         // Build the list of SDK components to load. Valid components are:
         // buttons, marks, messages, funding-eligibility, hosted-fields, card-fields, googlepay, applepay
-        //
-        // Note: 'venmo' is NOT a valid SDK component. Venmo is a funding source that works through
-        // the 'buttons' component using paypal.FUNDING.VENMO. When Venmo is enabled, we add the
-        // 'buttons' component which allows rendering Venmo buttons via paypal.Buttons({ fundingSource: paypal.FUNDING.VENMO }).
+        //        
         //
         $components = ['messages'];
 
         // Never load the global `buttons` component here. Wallet modules that
-        // actually call paypal.Buttons() (Pay Later, Venmo, product/cart Smart
+        // actually call paypal.Buttons() (Pay Later, product/cart Smart
         // Buttons) load `components=buttons` themselves.
         //
         // Loading buttons site-wide whenever PAYLATER_STATUS (or formerly
@@ -660,7 +656,6 @@ class zcObserverPaypaladvcheckout
                     "PayPal=" . (defined('MODULE_PAYMENT_PAYPALAC_STATUS') ? MODULE_PAYMENT_PAYPALAC_STATUS : 'n/a') . ", " .
                     "GooglePay=" . (defined('MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_STATUS') ? MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_STATUS : 'n/a') . ", " .
                     "ApplePay=" . (defined('MODULE_PAYMENT_PAYPALAC_APPLEPAY_STATUS') ? MODULE_PAYMENT_PAYPALAC_APPLEPAY_STATUS : 'n/a') . ", " .
-                    "Venmo=" . (defined('MODULE_PAYMENT_PAYPALAC_VENMO_STATUS') ? MODULE_PAYMENT_PAYPALAC_VENMO_STATUS : 'n/a') . ", " .
                     "PayLater=" . (defined('MODULE_PAYMENT_PAYPALAC_PAYLATER_STATUS') ? MODULE_PAYMENT_PAYPALAC_PAYLATER_STATUS : 'n/a') . "\n" .
                 "  - User Logged In: " . ($this->isUserLoggedIn() ? 'yes' : 'no') . "\n" .
                 "  - Guest Wallet Enabled: " . ($this->isGuestWalletEnabled() ? 'yes' : 'no') . "\n" .
