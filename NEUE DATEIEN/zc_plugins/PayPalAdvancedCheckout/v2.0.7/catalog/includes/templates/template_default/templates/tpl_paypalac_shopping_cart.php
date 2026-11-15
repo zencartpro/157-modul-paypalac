@@ -19,7 +19,7 @@ if (class_exists(\PayPalAdvancedCheckout\Common\PluginPaths::class, false)) {
 // Dynamically fetch store's ISO country code
 $country_query = "SELECT countries_iso_code_2 FROM " . TABLE_COUNTRIES . " WHERE countries_id = " . (int)STORE_COUNTRY;
 $country_result = $db->Execute($country_query);
-$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'US';  // Fallback to 'US' if not found
+$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'DE';  // Fallback to 'DE' if not found
 $currencyCode         = $_SESSION['currency'] ?? DEFAULT_CURRENCY;
 $initialTotal         = number_format($currencies->value($_SESSION['cart']->total), 2, '.', '');
 $storeName = STORE_NAME;

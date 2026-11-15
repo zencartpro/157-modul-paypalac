@@ -1224,7 +1224,7 @@ class paypalac extends base
             'plan_id' => $planId,
             'application_context' => [
                 'brand_name' => defined('STORE_NAME') ? STORE_NAME : 'Online Store',
-                'locale' => 'en-US',
+                'locale' => 'de-DE',
                 'shipping_preference' => 'NO_SHIPPING',
                 'user_action' => 'SUBSCRIBE_NOW',
                 'payment_method' => [
@@ -3404,7 +3404,7 @@ class paypalac extends base
      * Used to re-authorize a previously-created transaction, possibly changing the
      * authorized value.
      */
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         $ppr = $this->getPayPalAdvancedCheckoutApi();
         if ($ppr === null) {
@@ -3418,7 +3418,7 @@ class paypalac extends base
      * Used to capture part or all of a given previously-authorized transaction.  A capture is
      * performed against the most recent authorization (or re-authorization).
      */
-    public function _doCapt($oID, $captureType = 'Complete', $order_amt = 0, $order_currency = 'USD')
+    public function _doCapt($oID, $captureType = 'Complete', $order_amt = 0, $order_currency = 'EUR')
     {
         $ppr = $this->getPayPalAdvancedCheckoutApi();
         if ($ppr === null) {

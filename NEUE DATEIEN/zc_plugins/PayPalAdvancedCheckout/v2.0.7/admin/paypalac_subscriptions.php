@@ -775,7 +775,7 @@ if ($action === 'create_subscription') {
     }
     $customersId = (int) $orderCheck->fields['customers_id'];
     if (empty($currencyCode)) {
-        $currencyCode = (string) ($orderCheck->fields['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD'));
+        $currencyCode = (string) ($orderCheck->fields['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR'));
     }
 
     // Look up product details
@@ -2990,7 +2990,7 @@ function paypalac_get_table_columns($tableName)
                                             <input type="text" name="billing_postcode" value="<?php echo zen_output_string_protected((string) ($row['billing_postcode'] ?? '')); ?>" form="<?php echo $formId; ?>" class="nmx-form-control" />
                                         </div>
                                         <div>
-                                            <label>Country Code (2-letter, e.g., CA, US)</label>
+                                            <label>Country Code (2-letter, e.g., DE, AT)</label>
                                             <input type="text" maxlength="2" pattern="[A-Z]{2}" name="billing_country_code" value="<?php echo zen_output_string_protected((string) ($row['billing_country_code'] ?? '')); ?>" form="<?php echo $formId; ?>" class="nmx-form-control" style="text-transform: uppercase;" placeholder="CA" />
                                         </div>
                                     </div>

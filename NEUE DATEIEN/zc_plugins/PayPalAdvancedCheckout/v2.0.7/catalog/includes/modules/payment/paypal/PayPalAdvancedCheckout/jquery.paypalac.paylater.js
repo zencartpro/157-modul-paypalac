@@ -20,7 +20,7 @@
     var WALLET_BUTTON_MAX_WIDTH = '320px';
     // Fixed target width matching --paypalac-wallet-button-width in paypalac.css.
     // Setting an explicit inline width (rather than 100%) keeps this button the
-    // same size as Apple Pay/Google Pay/Venmo even before/without the CSS file
+    // same size as Apple Pay/Google Pay even before/without the CSS file
     // loading, since Apple Pay never sets an inline width at all.
     var WALLET_BUTTON_WIDTH = '240px';
 
@@ -694,7 +694,7 @@
     }
 
     function buildSdkKey(config) {
-        var currency = config.currency || 'USD';
+        var currency = config.currency || 'EUR';
         var merchantId = config.merchantId || '';
         var environment = config.environment || 'sandbox';
         var intent = normalizeSdkIntent(config.intent);
@@ -797,7 +797,7 @@
 
         if (existingPaylaterScript) {
             var matchesClient = existingPaylaterScript.src.indexOf(encodeURIComponent(config.clientId)) !== -1;
-            var matchesCurrency = existingPaylaterScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'USD')) !== -1;
+            var matchesCurrency = existingPaylaterScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'EUR')) !== -1;
             var matchesMerchant = !config.merchantId || existingPaylaterScript.src.indexOf('merchant-id=' + encodeURIComponent(config.merchantId)) !== -1;
             var matchesPaylater = existingPaylaterScript.src.indexOf('enable-funding=paylater') !== -1;
             var matchesButtons = existingPaylaterScript.src.indexOf('components=buttons') !== -1
@@ -834,10 +834,10 @@
             + '&components=buttons'
             + '&enable-funding=paylater'
             + '&intent=' + encodeURIComponent(normalizeSdkIntent(config.intent))
-            + '&currency=' + encodeURIComponent(config.currency || 'USD');
+            + '&currency=' + encodeURIComponent(config.currency || 'EUR');
 
         if (isSandbox) {
-            query += '&buyer-country=US';
+            query += '&buyer-country=DE';
         }
 
         if (config.merchantId && /^[A-Z0-9]{5,20}$/i.test(config.merchantId)) {

@@ -1618,7 +1618,7 @@ class paypalac_creditcard extends base
         return $this->paypalCommon->processRefund($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION);
     }
 
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         return $this->paypalCommon->processAuthorization($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $order_amt, $currency, false);
     }

@@ -619,7 +619,7 @@ class paypalac_googlepay extends base
             "Google Pay ajaxGetWalletConfig:\n" .
             "  - Environment: " . MODULE_PAYMENT_PAYPALAC_SERVER . "\n" .
             "  - Client ID: " . $loggedClientId . "\n" .
-            "  - Currency: " . ($_SESSION['currency'] ?? 'USD') . "\n" .
+            "  - Currency: " . ($_SESSION['currency'] ?? 'EUR') . "\n" .
             "  - Intent: " . $intent . "\n" .
             "  - Google Merchant ID: " . $google_merchant_log_value . "\n" .
             "  - Module Enabled: " . ($this->enabled ? 'Yes' : 'No'),
@@ -657,7 +657,7 @@ class paypalac_googlepay extends base
             'clientId' => $client_id,
             'merchantId' => $google_merchant_id,
             'googleMerchantId' => $google_merchant_id,
-            'currency' => $_SESSION['currency'] ?? 'USD',
+            'currency' => $_SESSION['currency'] ?? 'EUR',
             'intent' => $intent,
             'environment' => MODULE_PAYMENT_PAYPALAC_SERVER,
             'enableGuestWallet' => (defined('MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_ENABLE_GUEST_WALLET') && MODULE_PAYMENT_PAYPALAC_GOOGLEPAY_ENABLE_GUEST_WALLET === 'True'),
@@ -1026,7 +1026,7 @@ class paypalac_googlepay extends base
         return $this->paypalCommon->processRefund($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION);
     }
 
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         return $this->paypalCommon->processAuthorization($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $order_amt, $currency, false);
     }
@@ -1130,14 +1130,14 @@ class paypalac_googlepay extends base
      * Used as a fallback when the PayPal SDK does not provide a countryCode
      * in its Google Pay configuration.
      *
-     * @return string Two-letter country code, e.g. 'US', 'CA', 'GB'
+     * @return string Two-letter country code, e.g. 'DE', 'AT', 'GB'
      */
     protected function getStoreCountryCode(): string
     {
         global $db;
 
         if (!defined('STORE_COUNTRY') || !defined('TABLE_COUNTRIES')) {
-            return 'US';
+            return 'DE';
         }
 
         $result = $db->Execute(
@@ -1147,7 +1147,7 @@ class paypalac_googlepay extends base
 
         return (!$result->EOF && !empty($result->fields['countries_iso_code_2']))
             ? $result->fields['countries_iso_code_2']
-            : 'US';
+            : 'DE';
     }
 
     /**

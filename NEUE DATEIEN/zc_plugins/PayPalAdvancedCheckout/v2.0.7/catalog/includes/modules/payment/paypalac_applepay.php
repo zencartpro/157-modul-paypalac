@@ -551,7 +551,7 @@ class paypalac_applepay extends base
             "Apple Pay ajaxGetWalletConfig:\n" .
             "  - Environment: " . MODULE_PAYMENT_PAYPALAC_SERVER . "\n" .
             "  - Client ID: " . $loggedClientId . "\n" .
-            "  - Currency: " . ($_SESSION['currency'] ?? 'USD') . "\n" .
+            "  - Currency: " . ($_SESSION['currency'] ?? 'EUR') . "\n" .
             "  - Intent: " . $intent . "\n" .
             "  - Module Enabled: " . ($this->enabled ? 'Yes' : 'No'),
             true,
@@ -573,7 +573,7 @@ class paypalac_applepay extends base
             'success' => true,
             'clientId' => $client_id,
             'merchantId' => $merchant_id,
-            'currency' => $_SESSION['currency'] ?? 'USD',
+            'currency' => $_SESSION['currency'] ?? 'EUR',
             'intent' => $intent,
             'environment' => MODULE_PAYMENT_PAYPALAC_SERVER,
             'cartRequiresShipping' => $requiresShipping,
@@ -949,7 +949,7 @@ class paypalac_applepay extends base
         return $this->paypalCommon->processRefund($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION);
     }
 
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         return $this->paypalCommon->processAuthorization($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $order_amt, $currency, false);
     }

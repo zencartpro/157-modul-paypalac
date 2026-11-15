@@ -729,7 +729,7 @@ function scr_pagination_url($page, $perPage, $queryString) {
                                                                     <input type="text" name="billing_postcode" value="<?php echo zen_output_string_protected($subscription['billing_postcode']); ?>" class="nmx-form-control"/>
                                                                 </div>
                                                                 <div class="nmx-form-group">
-                                                                    <label>Country Code (2-letter, e.g., CA, US):</label>
+                                                                    <label>Country Code (2-letter, e.g., DE, AT):</label>
                                                                     <input type="text" name="billing_country_code" value="<?php echo zen_output_string_protected($subscription['billing_country_code']); ?>" maxlength="2" class="nmx-form-control"/>
                                                                 </div>
                                                                 <button type="submit" class="nmx-btn nmx-btn-primary">Save Address</button>

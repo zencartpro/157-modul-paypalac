@@ -64,7 +64,7 @@ class paypalac_paylater extends base
     // Pay Later is available in these currencies only
     protected const SUPPORTED_CURRENCIES = ['USD', 'GBP', 'EUR', 'AUD'];
 
-    // PayPal Pay in 4 published range for USD merchants; admin may override per account.
+    // PayPal Pay in 4 published range for EUR merchants; admin may override per account.
     protected const DEFAULT_MIN_AMOUNT = 30.0;
     protected const DEFAULT_MAX_AMOUNT = 2000.0;
 
@@ -748,7 +748,7 @@ class paypalac_paylater extends base
             "Pay Later ajaxGetWalletConfig:\n" .
             "  - Environment: " . MODULE_PAYMENT_PAYPALAC_SERVER . "\n" .
             "  - Client ID: " . $loggedClientId . "\n" .
-            "  - Currency: " . ($_SESSION['currency'] ?? 'USD') . "\n" .
+            "  - Currency: " . ($_SESSION['currency'] ?? 'EUR') . "\n" .
             "  - Intent: " . $intent . "\n" .
             "  - Module Enabled: " . ($this->enabled ? 'Yes' : 'No'),
             true,
@@ -784,7 +784,7 @@ class paypalac_paylater extends base
         return [
             'success' => true,
             'clientId' => $client_id,
-            'currency' => $_SESSION['currency'] ?? 'USD',
+            'currency' => $_SESSION['currency'] ?? 'EUR',
             'intent' => $intent,
             'environment' => MODULE_PAYMENT_PAYPALAC_SERVER,
         ] + $limit_context;
@@ -1287,7 +1287,7 @@ class paypalac_paylater extends base
         return $this->paypalCommon->processRefund($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION);
     }
 
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         return $this->paypalCommon->processAuthorization($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $order_amt, $currency, false);
     }

@@ -94,7 +94,7 @@
             if (!isNaN(configAmount) && configAmount > 0) {
                 return {
                     amount: configAmount.toFixed(2),
-                    currency: appleConfig.currencyCode || 'USD'
+                    currency: appleConfig.currencyCode || 'EUR'
                 };
             }
         }
@@ -119,7 +119,7 @@
         var numericMatch = totalText.match(/\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\d+(?:\.\d{2})?/);
         if (!numericMatch) {
             console.warn('Could not extract numeric amount from: ' + totalText);
-            return { amount: '0.00', currency: 'USD' };
+            return { amount: '0.00', currency: 'EUR' };
         }
 
         // Remove commas and validate as a number
@@ -128,7 +128,7 @@
         
         if (isNaN(parsedAmount) || parsedAmount < 0) {
             console.warn('Invalid amount extracted: ' + amount);
-            return { amount: '0.00', currency: 'USD' };
+            return { amount: '0.00', currency: 'EUR' };
         }
         
         // Format to 2 decimal places
@@ -659,7 +659,7 @@
 
         // Add buyer-country parameter for sandbox mode (required for testing)
         if (isSandbox) {
-            query += '&buyer-country=US';
+            query += '&buyer-country=DE';
         }
 
         // Only include merchant-id if it's a valid PayPal merchant ID (alphanumeric, typically 13 chars).
@@ -787,8 +787,8 @@
         }
         
         var paymentRequest = {
-            countryCode: applePayConfig.countryCode || 'US',
-            currencyCode: orderTotal.currency || applePayConfig.currencyCode || 'USD',
+            countryCode: applePayConfig.countryCode || 'DE',
+            currencyCode: orderTotal.currency || applePayConfig.currencyCode || 'EUR',
             merchantCapabilities: applePayConfig.merchantCapabilities || ['supports3DS'],
             supportedNetworks: applePayConfig.supportedNetworks || ['visa', 'masterCard', 'amex', 'discover'],
             total: {
@@ -1125,7 +1125,7 @@
         var button = document.createElement('apple-pay-button');
         button.setAttribute('buttonstyle', 'black');
         button.setAttribute('type', 'pay');
-        button.setAttribute('locale', 'en-US');
+        button.setAttribute('locale', 'de-DE');
         button.addEventListener('click', onApplePayButtonClicked);
         return button;
     }

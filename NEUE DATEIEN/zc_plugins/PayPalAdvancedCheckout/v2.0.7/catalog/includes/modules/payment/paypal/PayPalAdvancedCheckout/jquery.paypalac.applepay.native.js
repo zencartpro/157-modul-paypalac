@@ -86,7 +86,7 @@
         var button = document.createElement('apple-pay-button');
         button.setAttribute('buttonstyle', 'black');
         button.setAttribute('type', 'buy');
-        button.setAttribute('locale', 'en-US');
+        button.setAttribute('locale', 'de-DE');
         
         button.addEventListener('click', function() {
             handleApplePayButtonClick();
@@ -103,8 +103,8 @@
         var config = window.paypalacApplePayConfig || {};
         
         var paymentRequest = {
-            countryCode: config.storeCountryCode || 'US',
-            currencyCode: config.currencyCode || 'USD',
+            countryCode: config.storeCountryCode || 'DE',
+            currencyCode: config.currencyCode || 'EUR',
             total: {
                 label: config.storeName || 'Store',
                 amount: applePayFinalTotal
@@ -333,7 +333,7 @@
             body: JSON.stringify({
                 paypal_order_id: orderId,
                 module: 'paypalac_applepay',
-                currency: config.currencyCode || 'USD',
+                currency: config.currencyCode || 'EUR',
                 total: applePayFinalTotal,
                 email: email,
                 shipping_address: shipping,

@@ -71,7 +71,7 @@ class Amount
         if (($this->getDefaultCurrencyCode()) === '') {
             $fallback = (defined('DEFAULT_CURRENCY') && is_string(DEFAULT_CURRENCY) && DEFAULT_CURRENCY !== '')
                 ? DEFAULT_CURRENCY
-                : (defined('MODULE_PAYMENT_PAYPALAC_CURRENCY_FALLBACK') ? MODULE_PAYMENT_PAYPALAC_CURRENCY_FALLBACK : 'USD');
+                : (defined('MODULE_PAYMENT_PAYPALAC_CURRENCY_FALLBACK') ? MODULE_PAYMENT_PAYPALAC_CURRENCY_FALLBACK : 'EUR');
             $this->setDefaultCurrency((string)$fallback);
         }
 

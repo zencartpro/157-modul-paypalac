@@ -2198,7 +2198,7 @@ class PayPalCommon {
      * @param string $order_currency Currency code
      * @return mixed Capture result
      */
-    public function processCapture($oID, $ppr, string $module_code, string $module_version, string $captureType = 'Complete', $order_amt = 0, $order_currency = 'USD')
+    public function processCapture($oID, $ppr, string $module_code, string $module_version, string $captureType = 'Complete', $order_amt = 0, $order_currency = 'EUR')
     {
         if ($ppr === null) {
             return false;

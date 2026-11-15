@@ -561,7 +561,7 @@ class zcObserverPaypaladvcheckout
             $js_fields['client-id'] = 'sb'; // 'sb' for sandbox
             $js_fields['debug'] = 'true'; // sandbox only, un-minifies the JS
             $js_fields['buyer-country'] = $paypalSandboxBuyerCountryCodeOverride ?? $buyerCountry; // sandbox only
-            $js_fields['locale'] = $paypalSandboxLocaleOverride ?? 'en_US'; // only passing this in sandbox to allow override testing; otherwise just letting it default to customer's browser
+            $js_fields['locale'] = $paypalSandboxLocaleOverride ?? 'de_DE'; // only passing this in sandbox to allow override testing; otherwise just letting it default to customer's browser
         }
 
         if (!empty($order->info['currency'])) {
@@ -696,7 +696,7 @@ class zcObserverPaypaladvcheckout
             }
         }
 
-        return 'US';
+        return 'DE';
     }
 
     protected function outputJsFooter($current_page_base): void

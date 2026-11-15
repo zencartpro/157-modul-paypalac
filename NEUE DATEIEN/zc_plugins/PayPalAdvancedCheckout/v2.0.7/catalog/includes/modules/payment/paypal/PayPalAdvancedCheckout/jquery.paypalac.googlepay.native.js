@@ -126,8 +126,8 @@
                     type: 'LINE_ITEM',
                     price: googlePayFinalTotal
                 }],
-                currencyCode: config.currencyCode || 'USD',
-                countryCode: config.storeCountryCode || 'US'
+                currencyCode: config.currencyCode || 'EUR',
+                countryCode: config.storeCountryCode || 'DE'
             },
             emailRequired: true,
             shippingAddressRequired: true,
@@ -378,7 +378,7 @@
             body: JSON.stringify({
                 paypal_order_id: orderId,
                 module: 'paypalac_googlepay',
-                currency: config.currencyCode || 'USD',
+                currency: config.currencyCode || 'EUR',
                 total: googlePayFinalTotal,
                 email: email,
                 shipping_address: shipping,

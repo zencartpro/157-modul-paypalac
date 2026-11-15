@@ -40,7 +40,7 @@ define('LOG_FILE_PATH', DIR_FS_LOGS . '/paypalac_wallet_handler.log');
 /**
  * Get a validated base currency code
  * Ensures the currency exists in the Zen Cart currencies array
- * Falls back to USD or first available currency if needed
+ * Falls back to EUR or first available currency if needed
  * 
  * Side effects: May log warning or error messages if fallback is needed
  * 
@@ -59,10 +59,10 @@ function get_validated_base_currency($currencies, $preferredCurrency = null) {
         return DEFAULT_CURRENCY;
     }
     
-    // Try USD as fallback
-    if (isset($currencies->currencies['USD'])) {
-        log_paypalac_wallet_message('WARNING: DEFAULT_CURRENCY not available, falling back to USD');
-        return 'USD';
+    // Try EUR as fallback
+    if (isset($currencies->currencies['EUR'])) {
+        log_paypalac_wallet_message('WARNING: DEFAULT_CURRENCY not available, falling back to EUR');
+        return 'EUR';
     }
     
     // Last resort: use first available currency
@@ -177,7 +177,7 @@ if (!empty($data['products_id']) && (int)$data['products_id'] > 0) {
 // Dynamically fetch store's ISO country code
 $country_query = "SELECT countries_iso_code_2 FROM " . TABLE_COUNTRIES . " WHERE countries_id = " . (int)STORE_COUNTRY;
 $country_result = $db->Execute($country_query);
-$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'US';  // Default to US if not found
+$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'DE';  // Default to DE if not found
 
 // Extract shipping address details
 $shippingAddress = normalize_braintree_contact($data['shippingAddress'], $module) ?? [];

@@ -40,7 +40,7 @@
     // Get store country code for Apple Pay
     $country_query = "SELECT countries_iso_code_2 FROM " . TABLE_COUNTRIES . " WHERE countries_id = " . (int)STORE_COUNTRY;
     $country_result = $db->Execute($country_query);
-    $storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'US';
+    $storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'DE';
     
     // Build PayPal SDK URL - still needed for order creation/capture
     $sdkComponents = 'buttons,googlepay,applepay';
@@ -50,7 +50,7 @@
     
     // Add buyer-country for sandbox mode (required for testing)
     if ($environment === 'sandbox') {
-        $sdkUrl .= '&buyer-country=US';
+        $sdkUrl .= '&buyer-country=DE';
     }
 ?>
 

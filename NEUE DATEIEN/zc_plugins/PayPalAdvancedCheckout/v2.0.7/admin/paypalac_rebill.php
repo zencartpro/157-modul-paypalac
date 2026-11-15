@@ -171,7 +171,7 @@ if ($action === 'charge' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $amount = isset($_POST['amount']) ? (float)$_POST['amount'] : 0;
-    $currency = isset($_POST['currency']) ? trim((string)$_POST['currency']) : (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD');
+    $currency = isset($_POST['currency']) ? trim((string)$_POST['currency']) : (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR');
     $comments = isset($_POST['comments']) ? trim((string)$_POST['comments']) : '';
     $existing_orders_id = isset($_POST['orders_id']) ? (int)$_POST['orders_id'] : 0;
     $create_order = !empty($_POST['create_order']);
@@ -308,7 +308,7 @@ if ($customers_id > 0) {
 
 $searchResults = ($search !== '' && $customers_id <= 0) ? paypalac_rebill_search_customers($search) : [];
 $last_orders_id = isset($_GET['last_orders_id']) ? (int)$_GET['last_orders_id'] : 0;
-$default_currency = defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD';
+$default_currency = defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR';
 if (!paypalac_rebill_vault_enabled() && isset($messageStack) && is_object($messageStack)) {
     $messageStack->add(TEXT_VAULT_DISABLED_WARNING, 'warning');
 }

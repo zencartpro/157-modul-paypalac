@@ -66,7 +66,7 @@ class PaymentSaleCompleted extends WebhookHandlerContract
         }
 
         $amount = (float)($resource['amount']['total'] ?? 0);
-        $currencyCode = trim((string)($resource['amount']['currency'] ?? 'USD'));
+        $currencyCode = trim((string)($resource['amount']['currency'] ?? 'EUR'));
         $payerEmail = trim((string)($resource['payer']['payer_info']['email'] ?? ($this->data['summary'] ?? '')));
         $payerId = trim((string)($resource['payer']['payer_info']['payer_id'] ?? ''));
 

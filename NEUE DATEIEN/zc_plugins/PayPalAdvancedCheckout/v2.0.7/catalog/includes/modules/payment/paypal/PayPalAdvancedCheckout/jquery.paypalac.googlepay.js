@@ -27,7 +27,7 @@
     var WALLET_BUTTON_MAX_WIDTH = '320px';
     // Fixed target width matching --paypalac-wallet-button-width in paypalac.css.
     // Setting an explicit inline width (rather than 100%) keeps this button the
-    // same size as Apple Pay/Venmo/Pay Later even before/without the CSS file
+    // same size as Apple Pay/Pay Later even before/without the CSS file
     // loading, since Apple Pay never sets an inline width at all.
     var WALLET_BUTTON_WIDTH = '240px';
 
@@ -594,7 +594,7 @@
     // -------------------------------------------------------------------------
 
     function buildSdkKey(config) {
-        var currency = config.currency || 'USD';
+        var currency = config.currency || 'EUR';
         var googleMerchantId = config.googleMerchantId || config.merchantId || '';
         var environment = config.environment || 'sandbox';
         return [config.clientId, currency, googleMerchantId, environment].join('|');
@@ -726,7 +726,7 @@
 
         if (existingScript) {
             var matchesClient = existingScript.src.indexOf(encodeURIComponent(config.clientId)) !== -1;
-            var matchesCurrency = existingScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'USD')) !== -1;
+            var matchesCurrency = existingScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'EUR')) !== -1;
             // Only reuse a script that actually includes the googlepay component.
             // The header SDK may match client-id and currency but omit googlepay,
             // which would leave us polling forever and resolving without Googlepay.
@@ -803,11 +803,11 @@
         // Intent (capture/authorize) is specified when creating the PayPal order, not when loading the SDK.
         var query = '?client-id=' + encodeURIComponent(config.clientId)
             + '&components=buttons,googlepay,applepay'
-            + '&currency=' + encodeURIComponent(config.currency || 'USD');
+            + '&currency=' + encodeURIComponent(config.currency || 'EUR');
 
         // Add buyer-country parameter for sandbox mode (required for testing)
         if (isSandbox) {
-            query += '&buyer-country=US';
+            query += '&buyer-country=DE';
         }
 
         // Note: The google-pay-merchant-id parameter is NO LONGER SUPPORTED by PayPal SDK.
@@ -1135,8 +1135,8 @@
                             type: 'LINE_ITEM',
                             price: orderConfig.amount
                         }],
-                        currencyCode: orderConfig.currency || basePaymentDataRequest.transactionInfo?.currencyCode || 'USD',
-                        countryCode: basePaymentDataRequest.transactionInfo?.countryCode || orderConfig.storeCountryCode || 'US'
+                        currencyCode: orderConfig.currency || basePaymentDataRequest.transactionInfo?.currencyCode || 'EUR',
+                        countryCode: basePaymentDataRequest.transactionInfo?.countryCode || orderConfig.storeCountryCode || 'DE'
                     },
                     merchantInfo: basePaymentDataRequest.merchantInfo || {},
                     // PAYMENT_AUTHORIZATION enables paymentDataCallbacks without requiring

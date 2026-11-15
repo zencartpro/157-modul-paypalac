@@ -227,7 +227,7 @@ class SavedCreditCardsManager
             'billing_state' => "VARCHAR(255) DEFAULT NULL COMMENT 'Billing state/province'",
             'billing_postcode' => "VARCHAR(255) DEFAULT NULL COMMENT 'Billing postal code'",
             'billing_country_id' => "INT(11) DEFAULT NULL COMMENT 'Billing country ID (FK to countries table)'",
-            'billing_country_code' => "CHAR(2) DEFAULT NULL COMMENT 'Billing country ISO code (CA, US, etc.)'",
+            'billing_country_code' => "CHAR(2) DEFAULT NULL COMMENT 'Billing country ISO code (DE, AT, etc.)'",
             'shipping_method' => "VARCHAR(255) DEFAULT NULL COMMENT 'Shipping method name'",
             'shipping_cost' => "DECIMAL(15,4) DEFAULT NULL COMMENT 'Shipping cost at time of order'",
             'orders_id' => 'INT UNSIGNED NOT NULL DEFAULT 0',

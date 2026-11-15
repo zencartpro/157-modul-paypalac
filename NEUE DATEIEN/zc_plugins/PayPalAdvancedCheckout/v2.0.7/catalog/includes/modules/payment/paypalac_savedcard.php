@@ -1012,24 +1012,17 @@ class paypalac_savedcard extends base
         return $admin_main->get();
     }
 
-    public function help()
-    {
-        return [
-            'link' => 'https://github.com/lat9/paypalac/wiki'
-        ];
-    }
-
     public function _doRefund($oID)
     {
         return $this->paypalCommon->processRefund($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION);
     }
 
-    public function _doAuth($oID, $order_amt, $currency = 'USD')
+    public function _doAuth($oID, $order_amt, $currency = 'EUR')
     {
         return $this->paypalCommon->processAuthorization($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $order_amt, $currency, false);
     }
 
-    public function _doCapt($oID, $captureType = 'Complete', $order_amt = 0, $order_currency = 'USD')
+    public function _doCapt($oID, $captureType = 'Complete', $order_amt = 0, $order_currency = 'EUR')
     {
         return $this->paypalCommon->processCapture($oID, $this->getPayPalAdvancedCheckoutApi(), $this->code, self::CURRENT_VERSION, $captureType, $order_amt, $order_currency);
     }

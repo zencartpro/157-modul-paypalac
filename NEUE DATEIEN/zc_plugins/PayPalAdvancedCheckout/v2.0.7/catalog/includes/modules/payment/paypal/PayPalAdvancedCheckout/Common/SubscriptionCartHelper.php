@@ -372,6 +372,6 @@ class SubscriptionCartHelper
         if (defined('DEFAULT_CURRENCY')) {
             return strtoupper((string)DEFAULT_CURRENCY);
         }
-        return 'USD';
+        return 'EUR';
     }
 }

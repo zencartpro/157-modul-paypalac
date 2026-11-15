@@ -56,7 +56,7 @@ class PaymentSaleRefunded extends WebhookHandlerContract
         }
 
         $refundAmount   = (float)($resource['amount']['total'] ?? 0);
-        $refundCurrency = trim((string)($resource['amount']['currency'] ?? 'USD'));
+        $refundCurrency = trim((string)($resource['amount']['currency'] ?? 'EUR'));
 
         // Locate the original CAPTURE row written by PaymentSaleCompleted so
         // we know which Zen Cart order this refund affects.

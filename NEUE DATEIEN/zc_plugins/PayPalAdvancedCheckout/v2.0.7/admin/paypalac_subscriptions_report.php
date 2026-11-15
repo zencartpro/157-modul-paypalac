@@ -87,7 +87,7 @@ function asr_compute_annual_value($amount, $period, $frequency)
  */
 function asr_format_currency($currencies, $amount, $currencyCode)
 {
-    $currencyCode = ($currencyCode !== null && $currencyCode !== '') ? $currencyCode : (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD');
+    $currencyCode = ($currencyCode !== null && $currencyCode !== '') ? $currencyCode : (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR');
 
     if (!is_object($currencies) || !method_exists($currencies, 'format')) {
         return number_format((float)$amount, 2) . ' ' . $currencyCode;
@@ -206,8 +206,8 @@ if ($sortDirection !== 'desc') {
     $sortDirection = 'asc';
 }
 
-$languageId = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 1;
-$defaultCurrency = defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD';
+$languageId = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 43;
+$defaultCurrency = defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR';
 
 $subscriptionAggregates = [];
 $typeCounts = ['paypal' => 0, 'savedcard' => 0, 'rest' => 0];

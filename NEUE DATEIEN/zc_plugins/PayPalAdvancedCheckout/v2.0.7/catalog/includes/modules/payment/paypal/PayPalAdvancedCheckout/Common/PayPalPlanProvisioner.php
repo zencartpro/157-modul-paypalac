@@ -48,7 +48,7 @@ class PayPalPlanProvisioner
      * Required keys in $subscriptionConfig:
      *   - products_id          int    Zen Cart products_id (for cache scoping & display)
      *   - products_name        string Display name (max 127 chars; PayPal truncates)
-     *   - currency_code        string ISO 4217 (e.g. USD)
+     *   - currency_code        string ISO 4217 (e.g. EUR)
      *   - amount               float  Per-billing-cycle charge
      *   - billing_period       string DAY|WEEK|MONTH|YEAR (PayPal interval unit)
      *   - billing_frequency    int    interval_count

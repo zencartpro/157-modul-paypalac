@@ -269,7 +269,7 @@ $define = [
     'MODULE_PAYMENT_PAYPALAC_REAUTH_NOTE1' => 'Within the 29-day authorization period, you can issue multiple re-authorizations after the 3-day honor period expires for the previously-issued authorization.',
     'MODULE_PAYMENT_PAYPALAC_REAUTH_NOTE2' => 'If 30 days have transpired since the date of the original authorization, you must create an authorized payment instead of re-authorizing the original.',
     'MODULE_PAYMENT_PAYPALAC_REAUTH_NOTE3' => 'A re-authorized payment itself has a new honor period of three days.',
-    'MODULE_PAYMENT_PAYPALAC_REAUTH_NOTE4' => 'You can re-authorize an authorized payment <em>once</em> for up to 115%% of the original authorized amount (%s), not to exceed an increase of $75 USD.',
+    'MODULE_PAYMENT_PAYPALAC_REAUTH_NOTE4' => 'You can re-authorize an authorized payment <em>once</em> for up to 115%% of the original authorized amount (%s), not to exceed an increase of 75 EUR.',
 
     'MODULE_PAYMENT_PAYPALAC_REAUTH_ORIGINAL' => 'Original Amount:',
     'MODULE_PAYMENT_PAYPALAC_REAUTH_NEW_AMOUNT' => 'Authorized Amount:',

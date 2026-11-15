@@ -3,7 +3,7 @@
 // Dynamically fetch store's ISO country code
 $country_query = "SELECT countries_iso_code_2 FROM " . TABLE_COUNTRIES . " WHERE countries_id = " . (int)STORE_COUNTRY;
 $country_result = $db->Execute($country_query);
-$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'US';  // Fallback to 'US' if not found
+$storeCountryCode = $country_result->fields['countries_iso_code_2'] ?? 'DE';  // Fallback to 'DE' if not found
 
 $currencyCode = $_SESSION['currency'] ?? DEFAULT_CURRENCY;
 $storeName = STORE_NAME;

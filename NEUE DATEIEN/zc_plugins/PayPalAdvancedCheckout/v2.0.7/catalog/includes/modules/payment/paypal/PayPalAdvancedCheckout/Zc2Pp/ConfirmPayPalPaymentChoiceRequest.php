@@ -75,7 +75,7 @@ class ConfirmPayPalPaymentChoiceRequest
                 'experience_context' => [
                     'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',    //- No eChecks, no means to test in the sandbox environment
                     'brand_name' => $brand_name,
-//                    'locale' => 'en-US',
+//                    'locale' => 'de-DE',
                     'landing_page' => 'NO_PREFERENCE',  //- LOGIN, GUEST_CHECKOUT or NO_PREFERENCE
                     'shipping_preference' => $shipping_preference,    //- GET_FROM_FILE (allows shipping address change on PayPal), NO_SHIPPING, SET_PROVIDED_ADDRESS (customer can't change)
                     'user_action' => $this->userAction,  //- PAY_NOW or CONTINUE

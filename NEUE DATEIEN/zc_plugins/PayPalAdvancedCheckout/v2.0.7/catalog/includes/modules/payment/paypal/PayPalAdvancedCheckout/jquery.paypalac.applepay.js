@@ -83,7 +83,7 @@
         var totalElement = document.getElementById(totalSelector);
         if (!totalElement) {
             console.warn('Order total element not found: #' + totalSelector);
-            return { amount: '0.00', currency: 'USD' };
+            return { amount: '0.00', currency: 'EUR' };
         }
 
         // Extract text content and parse the amount
@@ -736,11 +736,11 @@
         // Intent (capture/authorize) is specified when creating the PayPal order, not when loading the SDK.
         var query = '?client-id=' + encodeURIComponent(config.clientId)
             + '&components=buttons,googlepay,applepay'
-            + '&currency=' + encodeURIComponent(config.currency || 'USD');
+            + '&currency=' + encodeURIComponent(config.currency || 'EUR');
 
         // Add buyer-country parameter for sandbox mode (required for testing)
         if (isSandbox) {
-            query += '&buyer-country=US';
+            query += '&buyer-country=DE';
         }
 
         // Only include merchant-id if it's a valid PayPal merchant ID (alphanumeric, typically 13 chars).
@@ -857,8 +857,8 @@
         // On checkout, shipping address and options are already handled by the checkout flow,
         // so the Apple Pay modal should NOT request shipping fields.
         var paymentRequest = {
-            countryCode: applePayConfig.countryCode || 'US',
-            currencyCode: orderTotal.currency || applePayConfig.currencyCode || 'USD',
+            countryCode: applePayConfig.countryCode || 'DE',
+            currencyCode: orderTotal.currency || applePayConfig.currencyCode || 'EUR',
             merchantCapabilities: applePayConfig.merchantCapabilities || ['supports3DS'],
             supportedNetworks: applePayConfig.supportedNetworks || ['visa', 'masterCard', 'amex', 'discover'],
             total: {
@@ -1059,7 +1059,7 @@
         var button = document.createElement('apple-pay-button');
         button.setAttribute('buttonstyle', 'black');
         button.setAttribute('type', 'pay');
-        button.setAttribute('locale', 'en-US');
+        button.setAttribute('locale', 'de-DE');
         button.addEventListener('click', onApplePayButtonClicked);
         return button;
     }

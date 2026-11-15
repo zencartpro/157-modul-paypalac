@@ -615,7 +615,7 @@ $vaultId = $this->extract_vault_id_from_card($payment_details);
                if (isset($payment_details['currencycode']) && strlen($payment_details['currencycode']) > 0) {
                        return $payment_details['currencycode'];
                }
-               return defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD';
+               return defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR';
        }
        /**
         * Merchant-initiated one-off charge of a vaulted/saved card (admin rebill).
@@ -812,7 +812,7 @@ $vaultId = $this->extract_vault_id_from_card($payment_details);
 
                $customers_id = (int)($options['customers_id'] ?? $payment_result['customers_id'] ?? 0);
                $amount = number_format((float)($options['amount'] ?? $payment_result['amount'] ?? 0), 2, '.', '');
-               $currency = (string)($options['currency'] ?? $payment_result['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD'));
+               $currency = (string)($options['currency'] ?? $payment_result['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR'));
                $comments = trim((string)($options['comments'] ?? ''));
                $product_name = trim((string)($options['product_name'] ?? 'Admin rebill'));
                if ($product_name === '') {
@@ -1119,7 +1119,7 @@ $vaultId = $this->extract_vault_id_from_card($payment_details);
                // Super Orders amounts are not FX-converted; only apply when currencies match.
                $currency = strtoupper(trim((string)$currency));
                if ($currency === '') {
-                       $currency = strtoupper(trim((string)($payment_result['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD'))));
+                       $currency = strtoupper(trim((string)($payment_result['currency'] ?? (defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'EUR'))));
                }
                $order_currency = $db->Execute(
                    "SELECT currency FROM " . TABLE_ORDERS . " WHERE orders_id = " . $orders_id . " LIMIT 1"
@@ -1399,7 +1399,7 @@ $cardPayload = $this->build_vault_payment_source($payment_details, array('stored
                $paypal_order_id = $payment_result['paypal_order_id'] ?? '';
                $transaction_id = $payment_result['transaction_id'] ?? '';
                $intent = $payment_result['intent'] ?? 'CAPTURE';
-               $currency = $payment_result['currency'] ?? 'USD';
+               $currency = $payment_result['currency'] ?? 'EUR';
                $amount = $payment_result['amount'] ?? '0.00';
                $payment_status = $payment_result['payment_status'] ?? 'Completed';
                $pending_reason = $payment_result['pending_reason'] ?? '';
@@ -1931,7 +1931,7 @@ $cardPayload = $this->build_vault_payment_source($payment_details, array('stored
                         } elseif (isset($_SESSION['currency']) && $_SESSION['currency'] !== '') {
                                 $normalized['currency_code'] = $_SESSION['currency'];
                         } else {
-                                $normalized['currency_code'] = 'USD';
+                                $normalized['currency_code'] = 'EUR';
                         }
                 }
 

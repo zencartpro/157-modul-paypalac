@@ -551,7 +551,7 @@
     // -------------------------------------------------------------------------
 
     function buildSdkKey(config) {
-        var currency = config.currency || 'USD';
+        var currency = config.currency || 'EUR';
         var googleMerchantId = config.googleMerchantId || config.merchantId || '';
         var environment = config.environment || 'sandbox';
         return [config.clientId, currency, googleMerchantId, environment].join('|');
@@ -683,7 +683,7 @@
 
         if (existingScript) {
             var matchesClient = existingScript.src.indexOf(encodeURIComponent(config.clientId)) !== -1;
-            var matchesCurrency = existingScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'USD')) !== -1;
+            var matchesCurrency = existingScript.src.indexOf('currency=' + encodeURIComponent(config.currency || 'EUR')) !== -1;
             // Only reuse a script that actually includes the googlepay component.
             // The header SDK may match client-id and currency but omit googlepay,
             // which would leave us polling forever and resolving without Googlepay.
@@ -760,7 +760,7 @@
         // Intent (capture/authorize) is specified when creating the PayPal order, not when loading the SDK.
         var query = '?client-id=' + encodeURIComponent(config.clientId)
             + '&components=buttons,googlepay,applepay'
-            + '&currency=' + encodeURIComponent(config.currency || 'USD');
+            + '&currency=' + encodeURIComponent(config.currency || 'EUR');
 
         // Add buyer-country parameter for sandbox mode (required for testing)
         if (isSandbox) {
@@ -1048,8 +1048,8 @@
                             type: 'LINE_ITEM',
                             price: orderConfig.amount
                         }],
-                        currencyCode: orderConfig.currency || basePaymentDataRequest.transactionInfo?.currencyCode || 'USD',
-                        countryCode: basePaymentDataRequest.transactionInfo?.countryCode || orderConfig.storeCountryCode || 'US'
+                        currencyCode: orderConfig.currency || basePaymentDataRequest.transactionInfo?.currencyCode || 'EUR',
+                        countryCode: basePaymentDataRequest.transactionInfo?.countryCode || orderConfig.storeCountryCode || 'DE'
                     },
                     merchantInfo: merchantInfo,
                     // Email: guests must provide it; logged-in users have it in their session
@@ -1110,7 +1110,7 @@
                             payment_method_nonce: orderId,
                             module: 'paypalac_googlepay',
                             total: orderConfig.amount,
-                            currency: orderConfig.currency || 'USD',
+                            currency: orderConfig.currency || 'EUR',
                             email: email,
                             shipping_address: shippingAddress,
                             billing_address: billingAddress,

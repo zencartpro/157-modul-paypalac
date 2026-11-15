@@ -1139,7 +1139,7 @@ class zcObserverPaypaladvcheckoutRecurring
             . " LIMIT 1"
         );
         $customersId = is_object($orderRow) && !$orderRow->EOF ? (int)$orderRow->fields['customers_id'] : 0;
-        $currencyCode = is_object($orderRow) && !$orderRow->EOF ? (string)$orderRow->fields['currency'] : (string)($product['currency_code'] ?? 'USD');
+        $currencyCode = is_object($orderRow) && !$orderRow->EOF ? (string)$orderRow->fields['currency'] : (string)($product['currency_code'] ?? 'EUR');
         $currencyValue = is_object($orderRow) && !$orderRow->EOF ? (float)$orderRow->fields['currency_value'] : 1.0;
 
         $subscriptionRecordId = SubscriptionManager::logSubscription([

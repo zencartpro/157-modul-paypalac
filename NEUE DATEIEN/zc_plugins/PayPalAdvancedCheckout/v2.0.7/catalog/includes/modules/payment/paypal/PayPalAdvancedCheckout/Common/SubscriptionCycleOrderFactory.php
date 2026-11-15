@@ -52,7 +52,7 @@ class SubscriptionCycleOrderFactory
      * @param float  $cycleAmount        Currency-major amount actually billed
      *                                   by PayPal for this cycle.
      * @param string $cycleCurrencyCode  ISO 4217 currency code reported in
-     *                                   the webhook (e.g. "USD").
+     *                                   the webhook (e.g. "EUR").
      * @param string $saleId             PayPal sale id (resource.id from the
      *                                   PAYMENT.SALE.COMPLETED event), used
      *                                   for the transaction comment.
@@ -100,7 +100,7 @@ class SubscriptionCycleOrderFactory
         $newOrderColumns['date_purchased'] = $now;
         $newOrderColumns['last_modified']  = $now;
         $newOrderColumns['order_total']    = $cycleAmount;
-        $newOrderColumns['currency']       = $cycleCurrencyCode !== '' ? $cycleCurrencyCode : ($newOrderColumns['currency'] ?? 'USD');
+        $newOrderColumns['currency']       = $cycleCurrencyCode !== '' ? $cycleCurrencyCode : ($newOrderColumns['currency'] ?? 'EUR');
 
         \zen_db_perform(TABLE_ORDERS, $newOrderColumns);
         $newOrderId = (int)$db->insert_ID();

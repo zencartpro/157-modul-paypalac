@@ -824,8 +824,8 @@ if (!function_exists('paypalac_render_card_field_containers')) {
         ];
         if ($sdkIsSandbox) {
             $sdkQuery['debug'] = 'true';
-            $sdkQuery['buyer-country'] = 'US';
-            $sdkQuery['locale'] = 'en_US';
+            $sdkQuery['buyer-country'] = 'DE';
+            $sdkQuery['locale'] = 'de_DE';
         }
         $sdkUrl = 'https://www.paypal.com/sdk/js?' . str_replace('%2C', ',', http_build_query($sdkQuery));
         $partnerAttributionId = '';
